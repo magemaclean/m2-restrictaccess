@@ -15,6 +15,10 @@
                 <page></page>
                 <message>You must be logged in to access the requested page.</message>
             </cms>
+            <custom>
+                <routes></routes>
+                <message>You must be logged in to access the requested page.</message>
+            </custom>
         </restrictaccess>
     </default>
 </config>
