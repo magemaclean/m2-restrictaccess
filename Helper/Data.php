@@ -7,10 +7,13 @@ use MageMaclean\CustomerShipping\Model\Carrier;
 
 class Data extends AbstractHelper
 {
+    protected $serializer;
     
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context
+        \Magento\Framework\App\Helper\Context $context,
+        \Magento\Framework\Serialize\SerializerInterface $serializer
     ) {
+        $this->serializer = $serializer;
         parent::__construct($context);
     }
 
