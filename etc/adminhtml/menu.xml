@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
+    <menu>
+        <add id="MageMaclean_RestrictAccess::restrictaccess" 
+            title="Restrict Access" 
+            module="MageMaclean_RestrictAccess" 
+            sortOrder="20" 
+            parent="MageMaclean_Core::magemaclean" 
+            resource="MageMaclean_RestrictAccess::configuration" />
+        
+        <add id="MageMaclean_RestrictAccess::configuration" 
+            title="Configuration" 
+            module="MageMaclean_RestrictAccess" 
+            sortOrder="20" 
+            action="adminhtml/system_config/edit/section/carriers" 
+            parent="MageMaclean_RestrictAccess::restrictaccess" 
+            resource="MageMaclean_RestrictAccess::configuration" />
+    </menu>
+</config>

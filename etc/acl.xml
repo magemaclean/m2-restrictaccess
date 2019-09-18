@@ -4,12 +4,8 @@
     <acl>
         <resources>
             <resource id="Magento_Backend::admin">
-                <resource id="Magento_Backend::stores">
-                    <resource id="Magento_Backend::stores_settings">
-                        <resource id="Magento_Config::config">
-                            <resource id="MageMaclean_RestrictAccess::configuration" title="MageMaclean Restrict Access"/>
-                        </resource>
-                    </resource>
+                <resource id="MageMaclean_Core::magemaclean">
+                    <resource id="MageMaclean_RestrictAccess::configuration" title="Restrict Access Configuration"/>
                 </resource>
             </resource>
         </resources>
