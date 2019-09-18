@@ -13,7 +13,7 @@
             title="Configuration" 
             module="MageMaclean_RestrictAccess" 
             sortOrder="20" 
-            action="adminhtml/system_config/edit/section/carriers" 
+            action="adminhtml/system_config/edit/section/restrictaccess" 
             parent="MageMaclean_RestrictAccess::restrictaccess" 
             resource="MageMaclean_RestrictAccess::configuration" />
     </menu>
