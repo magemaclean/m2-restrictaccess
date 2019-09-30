@@ -79,7 +79,7 @@ class RestrictAccess implements ObserverInterface
             }
 
             if (in_array($actionFullName, $restrictRoutes)) {
-                $this->_messageManager->addError($this->_helper->getConfigData("general", "message"));
+                $this->_messageManager->addError($this->_helper->getConfigData("catalog", "message"));
                 $this->_response->setRedirect($this->_urlFactory->create()->getUrl('customer/account/login'));
                 return;
             }

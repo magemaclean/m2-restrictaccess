@@ -4,12 +4,12 @@
         <restrictaccess>
             <general>
                 <enabled>0</enabled>
-                <message>You must be logged in to access the catalog.</message>
             </general>
             <catalog>
                 <category>1</category>
                 <product>1</product>
                 <search>1</search>
+                <message>You must be logged in to access the catalog.</message>
             </catalog>
             <cms>
                 <page></page>
