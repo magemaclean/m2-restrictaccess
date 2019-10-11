@@ -45,9 +45,16 @@ class RestrictAccess implements ObserverInterface
         $request = $observer->getEvent()->getRequest();
         $actionFullName = strtolower($request->getFullActionName());
 
-        if($actionFullName === 'cms_page_view') {
+        if($actionFullName === 'cms_noroute_index') {
+            $noroutePage = $this->_helper->getNoroutePage();
+            if(!$this->_helper->canAccessCmsPage($noroutePage)) {
+                $this->_messageManager->addError($this->_helper->getConfigData("cms", "message"));
+                $this->_response->setRedirect($this->_urlFactory->create()->getUrl('customer/account/login'));
+                return;
+            }
+        } else if($actionFullName === 'cms_page_view') {
             $pageId = $request->getParam('page_id', false);
-            if($pageId && !$this->_helper->canAccessCmsPage($pageId)) {
+            if($pageId && !$this->_helper->canAccessCmsPageId($pageId)) {
                 $this->_messageManager->addError($this->_helper->getConfigData("cms", "message"));
                 $this->_response->setRedirect($this->_urlFactory->create()->getUrl('customer/account/login'));
             }
@@ -81,7 +88,6 @@ class RestrictAccess implements ObserverInterface
             if (in_array($actionFullName, $restrictRoutes)) {
                 $this->_messageManager->addError($this->_helper->getConfigData("catalog", "message"));
                 $this->_response->setRedirect($this->_urlFactory->create()->getUrl('customer/account/login'));
-                return;
             }
         }
     }

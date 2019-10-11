@@ -34,14 +34,30 @@ class Data extends AbstractHelper
         return !$this->getConfigData('catalog', 'search');
     }
 
-    public function canAccessCmsPage($pageId) {
+    public function canAccessCmsPage($page) {
         $pages = $this->getConfigData('cms', 'pages');
         if($pages && !empty($pages)) {
-            $pageIds = explode(",", $pages);
-            return (in_array($pageId, $pageIds)) ? true : false;
+            $pages = explode(",", $pages);
+            return (in_array($page, $pages)) ? false : true;
         }
 
         return true;
+    }
+
+    public function canAccessCmsPageId($pageId) {
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $cmsPage = $objectManager->get('\Magento\Cms\Model\Page');
+        $cmsPage->load($pageId);
+
+        return $this->canAccessCmsPage($cmsPage->getIdentifier());
+    }
+
+    public function getNoroutePage($storeId = null) {
+        return $this->scopeConfig->getValue(
+            'web/default/cms_no_route',
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function getConfigData($group, $field, $storeId = null)
