@@ -3,10 +3,11 @@ namespace MageMaclean\RestrictAccess\Helper;
 
 use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Store\Model\ScopeInterface;
-use MageMaclean\CustomerShipping\Model\Carrier;
 
 class Data extends AbstractHelper
 {
+    const XML_PATH_SECTION = 'restrictaccess';
+
     protected $serializer;
     
     public function __construct(
@@ -19,7 +20,7 @@ class Data extends AbstractHelper
 
     public function isEnabled()
     {
-        return $this->scopeConfig->isSetFlag('restrictaccess/general/enabled');
+        return $this->scopeConfig->isSetFlag(self::XML_PATH_SECTION . '/general/enabled');
     }
 
     public function canAccessCategory() {
@@ -63,7 +64,7 @@ class Data extends AbstractHelper
     public function getConfigData($group, $field, $storeId = null)
     {
         return $this->scopeConfig->getValue(
-            'restrictaccess/' . $group . '/' . $field,
+            self::XML_PATH_SECTION . '/' . $group . '/' . $field,
             ScopeInterface::SCOPE_STORE,
             $storeId
         );
