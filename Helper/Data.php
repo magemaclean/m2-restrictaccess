@@ -18,9 +18,13 @@ class Data extends AbstractHelper
         parent::__construct($context);
     }
 
-    public function isEnabled()
+    public function isEnabled($storeId = null)
     {
-        return $this->scopeConfig->isSetFlag(self::XML_PATH_SECTION . '/general/enabled');
+        return $this->scopeConfig->isSetFlag(
+            self::XML_PATH_SECTION . '/general/enabled',
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
     }
 
     public function canAccessCategory() {
