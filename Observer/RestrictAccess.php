@@ -5,12 +5,12 @@ namespace MageMaclean\RestrictAccess\Observer;
 use Magento\Customer\Model\Context;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Store\Model\StoreManagerInterface;
 
 use MageMaclean\RestrictAccess\Helper\Data as Helper;
  
 class RestrictAccess implements ObserverInterface
 {
+    protected $_logger;
     protected $_response;
     protected $_urlInterface;
     protected $_urlFactory;
@@ -18,10 +18,11 @@ class RestrictAccess implements ObserverInterface
     protected $_actionFlag;
     protected $_messageManagaer;
     protected $_customerSession;
+    protected $_storeManager;
     protected $_helper;
     
     public function __construct(
-        \Magento\Framework\Event\ManagerInterface $eventManager,
+        \Psr\Log\LoggerInterface $logger,
         \Magento\Framework\App\Response\Http $response,
         \Magento\Framework\UrlInterface $urlInterface,
         \Magento\Framework\UrlFactory $urlFactory,
@@ -29,9 +30,11 @@ class RestrictAccess implements ObserverInterface
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Customer\Model\Session $customerSession,
+        \Magento\Store\Model\StoreManagerInterface $storeManager,
         Helper $helper
     )
     {
+        $this->_logger = $logger;
         $this->_response = $response;
         $this->_urlFactory = $urlFactory;
         $this->_urlInterface = $urlInterface;
@@ -39,12 +42,14 @@ class RestrictAccess implements ObserverInterface
         $this->_actionFlag = $actionFlag;
         $this->_messageManager = $messageManager;
         $this->_customerSession = $customerSession;
+        $this->_storeManager = $storeManager;
         $this->_helper = $helper;
     }
 
     public function execute(Observer $observer)
     {
-        if(!$this->_helper->isEnabled()) {
+        $storeId = $this->_storeManager->getStore()->getId();
+        if(!$this->_helper->isEnabled($storeId)) {
             return;
         }
         
@@ -57,42 +62,42 @@ class RestrictAccess implements ObserverInterface
         $actionFullName = strtolower($request->getFullActionName());
 
         if($actionFullName === 'cms_noroute_index') {
-            $noroutePage = $this->_helper->getNoroutePage();
-            if(!$this->_helper->canAccessCmsPage($noroutePage)) {
-                return $this->_restrictAccessRedirect($this->_helper->getConfigData("cms", "message"));
+            $noroutePage = $this->_helper->getNoroutePage($storeId);
+            if(!$this->_helper->canAccessCmsPage($noroutePage, $storeId)) {
+                return $this->_restrictAccessRedirect($this->_helper->getConfigData("cms", "message", $storeId));
             }
         } else if($actionFullName === 'cms_page_view') {
             $pageId = $request->getParam('page_id', false);
-            if($pageId && !$this->_helper->canAccessCmsPageId($pageId)) {
-                return $this->_restrictAccessRedirect($this->_helper->getConfigData("cms", "message"));
+            if($pageId && !$this->_helper->canAccessCmsPageId($pageId, $storeId)) {
+                return $this->_restrictAccessRedirect($this->_helper->getConfigData("cms", "message", $storeId));
             }
         } else {
             $restrictRoutes = [];
-            if($customRoutes = $this->_helper->getCustomRoutes()) {
+            if($customRoutes = $this->_helper->getCustomRoutes($storeId)) {
                 foreach($customRoutes as $customRoute) {
-                    $restrictRoutes[] = $customRoute['route'];
+                    $restrictRoutes[] = $customRoute['value'];
                 }
                 if (in_array($actionFullName, $restrictRoutes)) {
-                    return $this->_restrictAccessRedirect($this->_helper->getConfigData("custom", "message"));
+                    return $this->_restrictAccessRedirect($this->_helper->getConfigData("custom", "message", $storeId));
                 }
             }
 
             $restrictRoutes = [];
-            if(!$this->_helper->canAccessCategory()) {
+            if(!$this->_helper->canAccessCategory($storeId)) {
                 $restrictRoutes[] = 'catalog_category_view';
                 $restrictRoutes[] = 'catalog_category_index';
             }
 
-            if(!$this->_helper->canAccessProduct()) {
+            if(!$this->_helper->canAccessProduct($storeId)) {
                 $restrictRoutes[] = 'catalog_product_view';
             }
 
-            if(!$this->_helper->canAccessSearch()) {
+            if(!$this->_helper->canAccessSearch($storeId)) {
                 $restrictRoutes[] = 'catalogsearch_result_index';
             }
 
             if (in_array($actionFullName, $restrictRoutes)) {
-                return $this->_restrictAccessRedirect($this->_helper->getConfigData("catalog", "message"));
+                return $this->_restrictAccessRedirect($this->_helper->getConfigData("catalog", "message", $storeId));
             }
         }
     }

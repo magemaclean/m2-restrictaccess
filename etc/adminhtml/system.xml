@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <section id="restrictaccess" translate="label" type="text" sortOrder="401" showInDefault="1" showInWebsite="1" showInStore="0">
+        <section id="restrictaccess" translate="label" type="text" sortOrder="401" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Restrict Guest Access</label>
             <tab>magemaclean</tab>
             <resource>MageMaclean_RestrictAccess::configuration</resource>
@@ -12,7 +12,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
-            <group id="catalog" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="catalog" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Restrict Catalog</label>
                 <field id="category" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Category</label>
@@ -30,7 +30,7 @@
                     <label>Message</label>
                 </field>
             </group>
-            <group id="cms" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="cms" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Restrict CMS</label>
                 <field id="pages" translate="label" type="multiselect" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Pages</label>
@@ -41,7 +41,7 @@
                 </field>
             </group>
 
-            <group id="custom" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="custom" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Custom Routes</label>
                 <field id="routes" translate="label" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Routes</label>

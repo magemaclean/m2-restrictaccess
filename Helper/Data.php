@@ -27,20 +27,20 @@ class Data extends AbstractHelper
         );
     }
 
-    public function canAccessCategory() {
-        return !$this->getConfigData('catalog', 'category');
+    public function canAccessCategory($storeId = null) {
+        return !$this->getConfigData('catalog', 'category', $storeId);
     }
 
-    public function canAccessProduct() {
-        return !$this->getConfigData('catalog', 'product');
+    public function canAccessProduct($storeId = null) {
+        return !$this->getConfigData('catalog', 'product', $storeId);
     }
 
-    public function canAccessSearch() {
-        return !$this->getConfigData('catalog', 'search');
+    public function canAccessSearch($storeId = null) {
+        return !$this->getConfigData('catalog', 'search', $storeId);
     }
 
-    public function canAccessCmsPage($page) {
-        $pages = $this->getConfigData('cms', 'pages');
+    public function canAccessCmsPage($page, $storeId = null) {
+        $pages = $this->getConfigData('cms', 'pages', $storeId);
         if($pages && !empty($pages)) {
             $pages = explode(",", $pages);
             return (in_array($page, $pages)) ? false : true;
@@ -49,12 +49,12 @@ class Data extends AbstractHelper
         return true;
     }
 
-    public function canAccessCmsPageId($pageId) {
+    public function canAccessCmsPageId($pageId, $storeId = null) {
         $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
         $cmsPage = $objectManager->get('\Magento\Cms\Model\Page');
         $cmsPage->load($pageId);
 
-        return $this->canAccessCmsPage($cmsPage->getIdentifier());
+        return $this->canAccessCmsPage($cmsPage->getIdentifier(), $storeId);
     }
 
     public function getNoroutePage($storeId = null) {
