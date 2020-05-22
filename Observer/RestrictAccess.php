@@ -60,10 +60,13 @@ class RestrictAccess implements ObserverInterface
         
         $request = $observer->getEvent()->getRequest();
         $actionFullName = strtolower($request->getFullActionName());
-
         if($actionFullName === 'cms_noroute_index') {
             $noroutePage = $this->_helper->getNoroutePage($storeId);
             if(!$this->_helper->canAccessCmsPage($noroutePage, $storeId)) {
+                return $this->_restrictAccessRedirect($this->_helper->getConfigData("cms", "message", $storeId));
+            }
+        } else if($actionFullName === 'cms_index_index') {
+            if(!$this->_helper->canAccessHomepage($storeId)) {
                 return $this->_restrictAccessRedirect($this->_helper->getConfigData("cms", "message", $storeId));
             }
         } else if($actionFullName === 'cms_page_view') {

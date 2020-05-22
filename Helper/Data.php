@@ -39,6 +39,16 @@ class Data extends AbstractHelper
         return !$this->getConfigData('catalog', 'search', $storeId);
     }
 
+    public function canAccessHomepage($storeId = null) {
+        $pageId = $this->scopeConfig->getValue(
+            'web/default/cms_home_page',
+            ScopeInterface::SCOPE_STORE,
+            $storeId
+        );
+        
+        return $this->canAccessCmsPage($pageId, $storeId);
+    }
+
     public function canAccessCmsPage($page, $storeId = null) {
         $pages = $this->getConfigData('cms', 'pages', $storeId);
         if($pages && !empty($pages)) {
