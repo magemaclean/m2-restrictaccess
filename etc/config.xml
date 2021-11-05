@@ -9,14 +9,17 @@
                 <category>1</category>
                 <product>1</product>
                 <search>1</search>
+                <message_type>notice</message_type>
                 <message>You must be logged in to access the catalog.</message>
             </catalog>
             <cms>
                 <page></page>
+                <message_type>notice</message_type>
                 <message>You must be logged in to access the requested page.</message>
             </cms>
             <custom>
                 <routes></routes>
+                <message_type>notice</message_type>
                 <message>You must be logged in to access the requested page.</message>
             </custom>
         </restrictaccess>

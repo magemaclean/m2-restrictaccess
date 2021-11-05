@@ -26,6 +26,10 @@
                     <label>Search</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="message_type" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Message Type</label>
+                    <source_model>MageMaclean\RestrictAccess\Model\Config\Source\Messagetype</source_model>
+                </field>
                 <field id="message" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Message</label>
                 </field>
@@ -35,6 +39,10 @@
                 <field id="pages" translate="label" type="multiselect" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Pages</label>
                     <source_model>Magento\Cms\Model\Config\Source\Page</source_model>
+                </field>
+                <field id="message_type" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Message Type</label>
+                    <source_model>MageMaclean\RestrictAccess\Model\Config\Source\Messagetype</source_model>
                 </field>
                 <field id="message" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Message</label>
@@ -48,6 +56,10 @@
                     <frontend_model>MageMaclean\RestrictAccess\Block\Adminhtml\System\Config\Form\Field\Routes</frontend_model>
                     <backend_model>MageMaclean\RestrictAccess\Config\Backend\Routes</backend_model>
                     <comment>Add your custom routes you wish to restrict access to. Example: module_controller_action</comment>
+                </field>
+                <field id="message_type" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Message Type</label>
+                    <source_model>MageMaclean\RestrictAccess\Model\Config\Source\Messagetype</source_model>
                 </field>
                 <field id="message" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Message</label>

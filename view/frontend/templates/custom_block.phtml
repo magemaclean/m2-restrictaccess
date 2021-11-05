@@ -1,0 +1,7 @@
+<?php if($this->canShowCustomBlock()): ?>
+    <div class="restrictaccess-messages messages">
+        <div class="message notice">
+            <p><?php echo $this->getRestrictMessage(); ?></p>
+        </div>
+    </div>
+<?php endif; ?>

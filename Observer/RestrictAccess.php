@@ -14,6 +14,7 @@ class RestrictAccess implements ObserverInterface
     protected $_response;
     protected $_urlInterface;
     protected $_urlFactory;
+    protected $_resultRedirectFactory;
     protected $_context;
     protected $_actionFlag;
     protected $_messageManagaer;
@@ -26,6 +27,7 @@ class RestrictAccess implements ObserverInterface
         \Magento\Framework\App\Response\Http $response,
         \Magento\Framework\UrlInterface $urlInterface,
         \Magento\Framework\UrlFactory $urlFactory,
+        \Magento\Framework\Controller\Result\RedirectFactory $resultRedirectFactory,
         \Magento\Framework\App\Http\Context $context,
         \Magento\Framework\App\ActionFlag $actionFlag,
         \Magento\Framework\Message\ManagerInterface $messageManager,
@@ -37,6 +39,7 @@ class RestrictAccess implements ObserverInterface
         $this->_logger = $logger;
         $this->_response = $response;
         $this->_urlFactory = $urlFactory;
+        $this->_resultRedirectFactory = $resultRedirectFactory;
         $this->_urlInterface = $urlInterface;
         $this->_context = $context;
         $this->_actionFlag = $actionFlag;
@@ -59,20 +62,22 @@ class RestrictAccess implements ObserverInterface
         }
         
         $request = $observer->getEvent()->getRequest();
+        $response = $observer->getControllerAction()->getResponse();
+
         $actionFullName = strtolower($request->getFullActionName());
         if($actionFullName === 'cms_noroute_index') {
             $noroutePage = $this->_helper->getNoroutePage($storeId);
             if(!$this->_helper->canAccessCmsPage($noroutePage, $storeId)) {
-                return $this->_restrictAccessRedirect($this->_helper->getConfigData("cms", "message", $storeId));
+                return $this->_restrictAccessRedirect($response, "cms");
             }
         } else if($actionFullName === 'cms_index_index') {
             if(!$this->_helper->canAccessHomepage($storeId)) {
-                return $this->_restrictAccessRedirect($this->_helper->getConfigData("cms", "message", $storeId));
+                return $this->_restrictAccessRedirect($response, "cms");
             }
         } else if($actionFullName === 'cms_page_view') {
             $pageId = $request->getParam('page_id', false);
             if($pageId && !$this->_helper->canAccessCmsPageId($pageId, $storeId)) {
-                return $this->_restrictAccessRedirect($this->_helper->getConfigData("cms", "message", $storeId));
+                return $this->_restrictAccessRedirect($response, "cms");
             }
         } else {
             $restrictRoutes = [];
@@ -81,7 +86,7 @@ class RestrictAccess implements ObserverInterface
                     $restrictRoutes[] = $customRoute['value'];
                 }
                 if (in_array($actionFullName, $restrictRoutes)) {
-                    return $this->_restrictAccessRedirect($this->_helper->getConfigData("custom", "message", $storeId));
+                    return $this->_restrictAccessRedirect($response, "custom");
                 }
             }
 
@@ -100,15 +105,47 @@ class RestrictAccess implements ObserverInterface
             }
 
             if (in_array($actionFullName, $restrictRoutes)) {
-                return $this->_restrictAccessRedirect($this->_helper->getConfigData("catalog", "message", $storeId));
+                return $this->_restrictAccessRedirect($response, "catalog");
             }
         }
     }
 
-    protected function _restrictAccessRedirect($message) {
-        $this->_messageManager->addError($message);
-        $this->_customerSession->setAfterAuthUrl($this->_urlInterface->getCurrentUrl());
-        $this->_customerSession->authenticate();
+    protected function _restrictAccessRedirect($response, $type) {
+        $this->_setRestrictMessage($type);
+        $this->_setRestrictRedirect($response, $type);
         return;
+    }
+
+    protected function _setRestrictMessage($type) {
+        $storeId = $this->_storeManager->getStore()->getId();
+        $messageType = $this->_helper->getConfigData($type, "message_type", $storeId);
+        $message = $this->_helper->getConfigData($type, "message", $storeId);
+        $message = __($message);
+
+        switch($messageType) {
+            case 'custom_block':
+                break;
+            case 'notice':
+                $this->_messageManager->addNoticeMessage($message);
+                break;
+            case 'warning':
+                $this->_messageManager->addWarningMessage($message);
+                break;
+            case 'success':
+                $this->_messageManager->addSuccessMessage($message);
+                break;
+            case 'error':
+            default:
+                $this->_messageManager->addErrorMessage($message);
+                break;
+        }
+    }
+    
+    protected function _setRestrictRedirect($response, $type) {
+        $this->_customerSession->setAfterAuthUrl($this->_urlInterface->getCurrentUrl());
+        #$this->_customerSession->authenticate();
+        
+        $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+        $response->setRedirect($this->_urlInterface->getUrl('customer/account/login', array('restrict' => $type)));
     }
 }
