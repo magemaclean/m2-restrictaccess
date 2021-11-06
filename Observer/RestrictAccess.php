@@ -142,9 +142,11 @@ class RestrictAccess implements ObserverInterface
     }
     
     protected function _setRestrictRedirect($response, $type) {
-        $this->_customerSession->setAfterAuthUrl($this->_urlInterface->getCurrentUrl());
+        #$this->_customerSession->setAfterAuthUrl($this->_urlInterface->getCurrentUrl());
         #$this->_customerSession->authenticate();
+        #$redirectUrl = $this->_urlInterface->getCurrentUrl();
         
+        $this->_customerSession->setRestrictedRedirectUrl($this->_urlInterface->getCurrentUrl());
         $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
         $response->setRedirect($this->_urlInterface->getUrl('customer/account/login', array('restrict' => $type)));
     }
