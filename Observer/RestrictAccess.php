@@ -124,6 +124,7 @@ class RestrictAccess implements ObserverInterface
 
         switch($messageType) {
             case 'custom_block':
+            case 'none':
                 break;
             case 'notice':
                 $this->_messageManager->addNoticeMessage($message);
@@ -142,12 +143,15 @@ class RestrictAccess implements ObserverInterface
     }
     
     protected function _setRestrictRedirect($response, $type) {
-        #$this->_customerSession->setAfterAuthUrl($this->_urlInterface->getCurrentUrl());
-        #$this->_customerSession->authenticate();
-        #$redirectUrl = $this->_urlInterface->getCurrentUrl();
-        
-        $this->_customerSession->setRestrictedRedirectUrl($this->_urlInterface->getCurrentUrl());
-        $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
-        $response->setRedirect($this->_urlInterface->getUrl('customer/account/login', array('restrict' => $type)));
+        $storeId = $this->_storeManager->getStore()->getId();
+        $messageType = $this->_helper->getConfigData($type, "message_type", $storeId);
+        if($messageType == 'custom_block') {
+            $this->_customerSession->setBeforeAuthUrl($this->_urlInterface->getCurrentUrl());
+            $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
+            $response->setRedirect($this->_urlInterface->getUrl('customer/account/login', array('restrict' => $type)));
+        } else {
+            $this->_customerSession->setBeforeAuthUrl($this->_urlInterface->getCurrentUrl());
+            $this->_customerSession->authenticate();
+        }
     }
 }

@@ -15,7 +15,8 @@ class Messagetype implements \Magento\Framework\Option\ArrayInterface
             ['value' => 'warning', 'label' => __('Warning')],
             ['value' => 'error', 'label' => __('Error')],
             ['value' => 'success', 'label' => __('Success')],
-            ['value' => 'custom_block', 'label' => __('Custom Block')]
+            ['value' => 'custom_block', 'label' => __('Custom Block')],
+            ['value' => 'none', 'label' => __('None')]
         ];
     }
 
@@ -31,7 +32,8 @@ class Messagetype implements \Magento\Framework\Option\ArrayInterface
             'warning' => __('Warning'),
             'error' => __('Error'),
             'success' => __('Success'),
-            'custom_block' => __('Custom Block')
+            'custom_block' => __('Custom Block'),
+            'none' => __('None')
         ];
     }
 }

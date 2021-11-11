@@ -32,6 +32,35 @@
                 </field>
                 <field id="message" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Message</label>
+                    <comment><![CDATA[
+                        <script type="text/javascript">//<![CDATA[
+                            require(['jquery'], function(){
+                                let sectionId = 'restrictaccess_catalog';
+                                let value = jQuery('#' + sectionId + '_message_type').val();
+
+                                if (value == 'none' || value == 'custom_block') {
+                                    toggleDependantFields(true);
+                                }
+                        
+                                jQuery('#' + sectionId + '_message_type').change(function() {
+                                    let value = jQuery(this).val();
+                                    if (value == 'none' || value == 'custom_block') {
+                                        toggleDependantFields(true);
+                                    } else {
+                                        toggleDependantFields(false);
+                                    }
+                                });
+                        
+                                function toggleDependantFields(hide=true)
+                                {
+                                    if (hide) {
+                                        jQuery('#row_' + sectionId + '_message').hide();
+                                    } else {
+                                        jQuery('#row_' + sectionId + '_message').show();
+                                    }
+                                }
+                            });
+                        </script>]]></comment>
                 </field>
             </group>
             <group id="cms" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
@@ -46,6 +75,35 @@
                 </field>
                 <field id="message" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Message</label>
+                    <comment><![CDATA[
+                        <script type="text/javascript">//<![CDATA[
+                            require(['jquery'], function(){
+                                let sectionId = 'restrictaccess_cms';
+                                let value = jQuery('#' + sectionId + '_message_type').val();
+
+                                if (value == 'none' || value == 'custom_block') {
+                                    toggleDependantFields(true);
+                                }
+                        
+                                jQuery('#' + sectionId + '_message_type').change(function() {
+                                    let value = jQuery(this).val();
+                                    if (value == 'none' || value == 'custom_block') {
+                                        toggleDependantFields(true);
+                                    } else {
+                                        toggleDependantFields(false);
+                                    }
+                                });
+                        
+                                function toggleDependantFields(hide=true)
+                                {
+                                    if (hide) {
+                                        jQuery('#row_' + sectionId + '_message').hide();
+                                    } else {
+                                        jQuery('#row_' + sectionId + '_message').show();
+                                    }
+                                }
+                            });
+                        </script>]]></comment>
                 </field>
             </group>
 
@@ -63,6 +121,35 @@
                 </field>
                 <field id="message" translate="label" type="textarea" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Message</label>
+                    <comment><![CDATA[
+                        <script type="text/javascript">//<![CDATA[
+                            require(['jquery'], function(){
+                                let sectionId = 'restrictaccess_custom';
+                                let value = jQuery('#' + sectionId + '_message_type').val();
+
+                                if (value == 'none' || value == 'custom_block') {
+                                    toggleDependantFields(true);
+                                }
+                        
+                                jQuery('#' + sectionId + '_message_type').change(function() {
+                                    let value = jQuery(this).val();
+                                    if (value == 'none' || value == 'custom_block') {
+                                        toggleDependantFields(true);
+                                    } else {
+                                        toggleDependantFields(false);
+                                    }
+                                });
+                        
+                                function toggleDependantFields(hide=true)
+                                {
+                                    if (hide) {
+                                        jQuery('#row_' + sectionId + '_message').hide();
+                                    } else {
+                                        jQuery('#row_' + sectionId + '_message').show();
+                                    }
+                                }
+                            });
+                        </script>]]></comment>
                 </field>
             </group>
         </section>
