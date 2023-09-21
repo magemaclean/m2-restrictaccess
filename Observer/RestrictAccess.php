@@ -17,7 +17,7 @@ class RestrictAccess implements ObserverInterface
     protected $_resultRedirectFactory;
     protected $_context;
     protected $_actionFlag;
-    protected $_messageManagaer;
+    protected $_messageManager;
     protected $_customerSession;
     protected $_storeManager;
     protected $_helper;
